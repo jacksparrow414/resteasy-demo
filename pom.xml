@@ -62,7 +62,7 @@
             <artifactId>resteasy-validator-provider</artifactId>
             <version>${resteasy.versioin}</version>
         </dependency>
-
+<!--resteasy 上传的-->
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-multipart-provider</artifactId>

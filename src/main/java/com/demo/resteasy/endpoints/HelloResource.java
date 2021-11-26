@@ -44,6 +44,9 @@ public class HelloResource {
     
     private static List<UserVO> users = new ArrayList<>();
 
+    /**
+     * curl http:localhost:8080/rest/hello/jack
+     */
     @GET
     @Path("{name}")
     @Produces(MediaType.TEXT_PLAIN)
@@ -55,6 +58,7 @@ public class HelloResource {
      * RestEasy提供了高级的@PathParam注解，可以不不用声明path的值，只要变量名字和路径变量一致即可
      * <a href="https://docs.jboss.org/resteasy/docs/3.8.1.Final/userguide/html/_NewParam.html">使用文档</a>
      *  搭配Maven compiler插件使用
+     *  curl http:localhost:8080/rest/hello/advanced/jack
      */
     @GET
     @Path("advanced/{name}")
@@ -63,6 +67,9 @@ public class HelloResource {
         return "Hi,there " + name;
     }
 
+    /**
+     * curl -X POST -H 'Content-Type: application/json' -d '{"userName":"jack", "age":18"}' http://localhost:8080/rest/hello/users
+     */
     @POST
     @Path("users")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -72,6 +79,9 @@ public class HelloResource {
         return Response.ok().entity(userVO).build();
     }
 
+    /**
+     * curl http:localhost:8080/rest/hello/users/0
+     */
     @GET
     @Path("users/{index}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -81,6 +91,9 @@ public class HelloResource {
         return Response.ok().entity(targetUser).build();
     }
 
+    /**
+     * curl -X DELETE http://localhost:8080/rest/hello/users/0
+     */
     @DELETE
     @Path("users/{index}")
     public Response deleteUser(@PathParam("index") Integer index) {
@@ -97,6 +110,7 @@ public class HelloResource {
 
     /**
      * 接收表单类型数据
+     * curl -X POST -d 'username=jack&age=18' http://localhost/rest/hello/users
      */
     @POST
     @Path("users")
@@ -111,6 +125,7 @@ public class HelloResource {
 
     /**
      * 接受一个或多个文件.
+     * curl -F 'fileName=@pictureLocation/upload.png' http://localhost:8080/rest/hello/file
      */
     @POST
     @Path("file")
@@ -153,16 +168,11 @@ public class HelloResource {
      * }
      **/
     private String getFileName(MultivaluedMap<String, String> header) {
-
         String[] contentDisposition = header.getFirst("Content-Disposition").split(";");
-
         for (String filename : contentDisposition) {
             if ((filename.trim().startsWith("filename"))) {
-
                 String[] name = filename.split("=");
-
-                String finalFileName = name[1].trim().replaceAll("\"", "");
-                return finalFileName;
+                return name[1].trim().replaceAll("\"", "");
             }
         }
         return "unknown";
@@ -178,7 +188,12 @@ public class HelloResource {
         fop.flush();
         fop.close();
     }
-    
+
+    /**
+     * curl -o download.png http://localhost:8080/rest/hello/file/upload.png
+     * @param fileName
+     * @return
+     */
     @GET
     @Path("file/{fileName}")
     @Produces("image/png")
@@ -187,11 +202,9 @@ public class HelloResource {
             ResponseBuilder response = Response.status(Status.BAD_REQUEST);
             return response.build();
         }
-    
         //Prepare a file object with file to return
         File file = new File(UPLOADED_FILE_PATH + fileName);
-    
-        ResponseBuilder response = Response.ok((Object) file);
+        ResponseBuilder response = Response.ok(file);
         response.header("Content-Disposition", "attachment; filename="+fileName);
         return response.build();
     }
