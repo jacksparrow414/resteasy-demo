@@ -12,4 +12,4 @@ CREATE TABLE "CLIENT"
     redirect_url           varchar(45) NOT NULL,
     scopes                 varchar(45) NOT NULL,
     authorized_grant_types varchar(45) NOT NULL
-)
+);
