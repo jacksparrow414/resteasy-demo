@@ -22,8 +22,12 @@ import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
+
+import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.annotations.Form;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
@@ -32,10 +36,11 @@ import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 /**
  * basic use for RestEasy
  */
+@Log
 @Path("hello")
 public class HelloResource {
     
-    private final String UPLOADED_FILE_PATH = "c:/temp/";
+    private final String UPLOADED_FILE_PATH = "D:\\tmp\\";
     
     private static List<UserVO> users = new ArrayList<>();
 
@@ -89,7 +94,10 @@ public class HelloResource {
             throw new WebApplicationException("user Not Found, please enter valid index", Response.Status.NOT_FOUND);
         }
     }
-    
+
+    /**
+     * 接收表单类型数据
+     */
     @POST
     @Path("users")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -97,45 +105,67 @@ public class HelloResource {
         if (Objects.isNull(userVO)) {
             throw new WebApplicationException(Status.BAD_REQUEST);
         }
+        users.add(userVO);
         return Response.ok().build();
     }
-    
+
+    /**
+     * 接受一个或多个文件.
+     */
     @POST
     @Path("file")
-    @Produces(MediaType.MULTIPART_FORM_DATA)
-    public Response uploadImage(MultipartFormDataInput input) throws IOException {
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response uploadImage(MultipartFormDataInput input) {
         //Get API input data
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
-    
-        //Get file name
-        String fileName = uploadForm.get("fileName").get(0).getBodyAsString();
-    
-        //Get file data to save
-        List<InputPart> inputParts = uploadForm.get("attachment");
-    
-        for (InputPart inputPart : inputParts)
-        {
-            try
-            {
+        List<InputPart> inputParts = uploadForm.get("fileName");
+        if (Objects.isNull(inputParts)) {
+            throw new WebApplicationException("no upload file, please upload file", Status.BAD_REQUEST);
+        }
+        StringBuilder uploadFileName = new StringBuilder();
+        for (InputPart inputPart : inputParts) {
+            // convert the uploaded file to inputstream
+            try(InputStream inputStream = inputPart.getBody(InputStream.class, null)) {
                 //Use this header for extra processing if required
-                @SuppressWarnings("unused") MultivaluedMap<String, String> header = inputPart.getHeaders();
-            
-                // convert the uploaded file to inputstream
-                InputStream inputStream = inputPart.getBody(InputStream.class, null);
-            
+                MultivaluedMap<String, String> header = inputPart.getHeaders();
+                String fileName = getFileName(header);
+                uploadFileName.append(fileName).append(",");
+                // 有内存溢出的危险
                 byte[] bytes = IOUtils.toByteArray(inputStream);
                 // constructs upload file path
                 fileName = UPLOADED_FILE_PATH + fileName;
                 writeFile(bytes, fileName);
                 System.out.println("Success !!!!!");
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
+            } catch (Exception e) {
+                log.log(Level.WARNING, "upload file fail", e);
+                throw new WebApplicationException(e.getMessage(), Status.INTERNAL_SERVER_ERROR);
             }
         }
         return Response.status(200)
-            .entity("Uploaded file name : "+ fileName).build();
+            .entity("File uploaded successfully.Uploaded file name : "+ uploadFileName.substring(0, uploadFileName.length()-1)).build();
+    }
+
+    /**
+     * header sample
+     * {
+     * 	Content-Type=[image/png],
+     * 	Content-Disposition=[form-data; name="file"; filename="filename.extension"]
+     * }
+     **/
+    private String getFileName(MultivaluedMap<String, String> header) {
+
+        String[] contentDisposition = header.getFirst("Content-Disposition").split(";");
+
+        for (String filename : contentDisposition) {
+            if ((filename.trim().startsWith("filename"))) {
+
+                String[] name = filename.split("=");
+
+                String finalFileName = name[1].trim().replaceAll("\"", "");
+                return finalFileName;
+            }
+        }
+        return "unknown";
     }
     
     private void writeFile(byte[] content, String filename) throws IOException {
@@ -151,19 +181,18 @@ public class HelloResource {
     
     @GET
     @Path("file/{fileName}")
-    @Produces("image/jpeg")
+    @Produces("image/png")
     public Response downLoadImage(@org.jboss.resteasy.annotations.jaxrs.PathParam String fileName) {
-        if(fileName == null || fileName.isEmpty())
-        {
+        if(fileName == null || fileName.isEmpty()) {
             ResponseBuilder response = Response.status(Status.BAD_REQUEST);
             return response.build();
         }
     
         //Prepare a file object with file to return
-        File file = new File("c:/demoJpegFile.jpeg");
+        File file = new File(UPLOADED_FILE_PATH + fileName);
     
         ResponseBuilder response = Response.ok((Object) file);
-        response.header("Content-Disposition", "attachment; filename=howtodoinjava.jpeg");
+        response.header("Content-Disposition", "attachment; filename="+fileName);
         return response.build();
     }
 }
