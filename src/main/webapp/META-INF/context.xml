@@ -1,16 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Context crossContext="true">
-<!--    <Resource name="jdbc/myLocalJPADB"-->
-<!--              auth="Container"-->
-<!--              type="javax.sql.DataSource"-->
-<!--              driverClassName="org.h2.Driver"-->
-<!--              url="jdbc:h2:mem:db1;DB_CLOSE_DELAY=-1"-->
-<!--              username="sa"-->
-<!--              password=""-->
-<!--              maxActive="100"-->
-<!--              maxIdle="20"-->
-<!--              minIdle="5"-->
-<!--              maxWait="10000"/>-->
     <ResourceLink global="jdbc/myLocalJPADB"
                   name="jdbc/myLocalJPADB"
                   auth="Container"
