@@ -10,14 +10,14 @@ import javax.persistence.Table;
 import java.security.Principal;
 
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 @Getter
 @Setter
 public class User implements Principal {
     @Id
     @Column(name = "user_id")
     private String userId;
-    @Column(name = "password")
+    @Column(name = "pass_word")
     private String password;
     @Column(name = "roles")
     private String roles;
