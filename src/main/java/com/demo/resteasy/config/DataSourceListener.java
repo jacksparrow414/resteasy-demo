@@ -1,4 +1,4 @@
-package com.demo.resteasy;
+package com.demo.resteasy.config;
 
 import com.demo.resteasy.util.JPAUtil;
 import lombok.extern.java.Log;
@@ -19,7 +19,7 @@ import java.util.logging.Level;
  * {@link com.demo.resteasy.util.JPAUtil}
  */
 @Log
-public class WebAppListener implements ServletContextListener {
+public class DataSourceListener implements ServletContextListener {
     
     @Override
     public void contextInitialized(ServletContextEvent event) {
