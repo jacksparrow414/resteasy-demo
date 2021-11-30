@@ -3,7 +3,6 @@ package com.demo.resteasy.model;
 import com.demo.resteasy.util.JPAUtil;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 
 public class AppDataRepository {
@@ -16,7 +15,7 @@ public class AppDataRepository {
     private EntityManager entityManager;
 
     public AppDataRepository() {
-        this.entityManager = JPAUtil.getEntityManager();
+        this.entityManager = JPAUtil.acquireEntityManager();
     }
 
     public Client getClient(String clientId) {

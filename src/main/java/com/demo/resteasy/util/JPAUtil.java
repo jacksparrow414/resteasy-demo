@@ -19,6 +19,10 @@ public class JPAUtil {
 
     public static final ThreadLocal<EntityManager> threadLocal = new ThreadLocal<>();
 
+    private JPAUtil() {
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * 引导JPA
      */
@@ -39,7 +43,7 @@ public class JPAUtil {
      * EntityManager
      * @return
      */
-    public static EntityManager getEntityManager(){
+    public static EntityManager acquireEntityManager(){
         EntityManager manager = threadLocal.get();
         if(manager == null || !manager.isOpen()){
             manager = entityManagerFactory.createEntityManager();
