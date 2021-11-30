@@ -13,7 +13,7 @@
     </resource-ref>
 <!--用来引导JPA-->
     <listener>
-        <display-name>Listener</display-name>
-        <listener-class>com.demo.resteasy.WebAppListener</listener-class>
+        <display-name>dataSourceListener</display-name>
+        <listener-class>com.demo.resteasy.config.DataSourceListener</listener-class>
     </listener>
 </web-app>
