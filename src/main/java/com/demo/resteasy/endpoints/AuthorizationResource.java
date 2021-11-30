@@ -6,6 +6,7 @@ import com.demo.resteasy.model.Client;
 import com.demo.resteasy.model.User;
 import net.bytebuddy.utility.RandomString;
 
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,11 +27,13 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
 @Path("authorize")
 public class AuthorizationResource {
+
+    @Inject
+    private AppDataRepository appDataRepository;
 
     /**
      * 申请用户授权.
@@ -53,7 +56,6 @@ public class AuthorizationResource {
             return informUserAboutError(request, response, "Invalid client_id :" + clientId);
         }
         // 判断clientId是否在认证服务器中
-        AppDataRepository appDataRepository = new AppDataRepository();
         Client client = appDataRepository.getClient(clientId);
         if (client == null) {
             return informUserAboutError(request, response, "Invalid client_id :" + clientId);
@@ -152,8 +154,6 @@ public class AuthorizationResource {
         }
         String responseType = originalParams.getFirst("response_type");
         String clientId = originalParams.getFirst("client_id");
-        // 没用CDI
-        AppDataRepository appDataRepository = new AppDataRepository();
         if ("code".equals(responseType)) {
 //            String userId = securityContext.getCallerPrincipal().getName();
             String userId = "appuser";
