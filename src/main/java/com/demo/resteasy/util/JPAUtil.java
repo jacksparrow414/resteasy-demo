@@ -30,6 +30,11 @@ public class JPAUtil {
         }
     }
 
+    public static void shutdownEntityManagerFactory() {
+        entityManagerFactory.close();
+        log.info("shutdown EntityManagerFactory");
+    }
+
     /**
      * EntityManager
      * @return

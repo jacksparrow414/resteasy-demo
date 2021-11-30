@@ -97,6 +97,19 @@
             <version>${h2.databse.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.jboss.weld.servlet</groupId>
+            <artifactId>weld-servlet-core</artifactId>
+            <version>3.1.8.Final</version>
+        </dependency>
+<!--restea-->
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-cdi</artifactId>
+            <version>${resteasy.versioin}</version>
+        </dependency>
+
+
         <!--        <dependency>-->
 <!--            <groupId>org.jboss.resteasy</groupId>-->
 <!--            <artifactId>resteasy-jackson2-provider</artifactId>-->

@@ -3,10 +3,16 @@ package com.demo.resteasy.model;
 import com.demo.resteasy.util.JPAUtil;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 
 public class AppDataRepository {
 
+//    @PersistenceContext
+    /**
+     * Tomcat不支持对JPA进行CDI注入，只能手动创建
+     * https://www.linkedin.com/pulse/getting-advantage-java-8-using-eclipselink-tomcat-se-nicola-cogotti/
+     */
     private EntityManager entityManager;
 
     public AppDataRepository() {
