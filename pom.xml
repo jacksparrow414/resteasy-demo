@@ -21,6 +21,7 @@
         <hibernate.validator.version>5.0.1.Final</hibernate.validator.version>
         <hibernate.orm.version>5.6.1.Final</hibernate.orm.version>
         <h2.databse.version>1.4.200</h2.databse.version>
+        <nimbus-jose-jwt.version>9.15.2</nimbus-jose-jwt.version>
     </properties>
 
     <dependencies>
@@ -107,6 +108,12 @@
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-cdi</artifactId>
             <version>${resteasy.versioin}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>nimbus-jose-jwt</artifactId>
+            <version>${nimbus-jose-jwt.version}</version>
         </dependency>
 
 
