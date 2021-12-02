@@ -27,7 +27,9 @@ public class AppDataRepository {
     }
 
     public AuthorizationCode save(AuthorizationCode authorizationCode) {
+        entityManager.getTransaction().begin();
         entityManager.persist(authorizationCode);
+        entityManager.getTransaction().commit();
         return authorizationCode;
     }
 }

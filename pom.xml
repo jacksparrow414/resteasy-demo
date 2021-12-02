@@ -22,6 +22,7 @@
         <hibernate.orm.version>5.6.1.Final</hibernate.orm.version>
         <h2.databse.version>1.4.200</h2.databse.version>
         <nimbus-jose-jwt.version>9.15.2</nimbus-jose-jwt.version>
+        <jackson.version>2.13.0</jackson.version>
     </properties>
 
     <dependencies>
@@ -116,12 +117,40 @@
             <version>${nimbus-jose-jwt.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15on</artifactId>
+            <version>1.69</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpkix-jdk15on</artifactId>
+            <version>1.69</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jackson2-provider</artifactId>
+            <version>${resteasy.versioin}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
 
-        <!--        <dependency>-->
-<!--            <groupId>org.jboss.resteasy</groupId>-->
-<!--            <artifactId>resteasy-jackson2-provider</artifactId>-->
-<!--            <version>${resteasy.versioin}</version>-->
-<!--        </dependency>-->
     </dependencies>
 
     <build>

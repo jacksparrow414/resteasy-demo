@@ -27,8 +27,8 @@ public class AuthorizationCode {
     @Column(name = "approved_scopes")
     private String approvedScopes;
 
-    @Column(name = "redirect_uri")
-    private String redirectUri;
+    @Column(name = "redirect_url")
+    private String redirectUrl;
 
     @Column(name = "expiration_date")
     private LocalDateTime expirationDate;
