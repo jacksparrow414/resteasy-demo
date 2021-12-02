@@ -163,7 +163,7 @@ public class AuthorizationResource {
             authorizationCode.setUserId(userId);
             authorizationCode.setApprovedScopes(String.join(" ", approvedScopes));
             authorizationCode.setExpirationDate(LocalDateTime.now().plusMinutes(10));
-            authorizationCode.setRedirectUri(redirectUri);
+            authorizationCode.setRedirectUrl(redirectUri);
             appDataRepository.save(authorizationCode);
             String code = authorizationCode.getCode();
             sb.append("?code=").append(code);

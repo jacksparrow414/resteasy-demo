@@ -1,11 +1,16 @@
 package com.demo.resteasy.endpoints;
 
+import com.demo.resteasy.handler.AuthorizationGrantTypeHandler;
 import com.demo.resteasy.model.AppDataRepository;
 import com.demo.resteasy.model.Client;
 import com.demo.resteasy.vo.TokenErrorVO;
 import com.demo.resteasy.vo.TokenVO;
+import lombok.extern.java.Log;
 
+import javax.enterprise.inject.Instance;
+import javax.enterprise.inject.literal.NamedLiteral;
 import javax.inject.Inject;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -17,7 +22,9 @@ import javax.ws.rs.core.Response;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
+import java.util.logging.Level;
 
+@Log
 @Path("token")
 public class TokenResource {
 
@@ -26,7 +33,11 @@ public class TokenResource {
     @Inject
     private AppDataRepository appDataRepository;
 
+    @Inject
+    private Instance<AuthorizationGrantTypeHandler> authorizationGrantTypeHandlers;
+
     @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
     public Response token(@HeaderParam(HttpHeaders.AUTHORIZATION) String authHeader,
                           MultivaluedMap<String, String> params) {
@@ -53,7 +64,13 @@ public class TokenResource {
         if (!clientSecret.equals(client.getClientSecret())) {
             return responseError("Invalid_request", "Invalid client_secret", Response.Status.UNAUTHORIZED);
         }
+        AuthorizationGrantTypeHandler authorizationGrantTypeHandler = authorizationGrantTypeHandlers.select(NamedLiteral.of(grantType)).get();
         TokenVO tokenResponse = null;
+        try {
+            tokenResponse = authorizationGrantTypeHandler.createAccessToken(clientId, params);
+        }catch (Exception ex) {
+            log.log(Level.WARNING, "acquire token failed", ex);
+        }
         return Response.ok(tokenResponse)
                 .header("Cache-Control", "no-store")
                 .header("Pragma", "no-cache")
