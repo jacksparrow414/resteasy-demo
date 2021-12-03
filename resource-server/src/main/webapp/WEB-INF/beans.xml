@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                      http://xmlns.jcp.org/xml/ns/javaee/beans_2_0.xsd"
+       bean-discovery-mode="all">
+<!--    关于beans.xml位置问题 https://stackoverflow.com/questions/13056336/cdi-beans-xml-where-do-i-put-you -->
+<!--    war放到webapp下，jar包放到src/main/resources/META-INF/-->
+</beans>

@@ -9,5 +9,5 @@ import javax.ws.rs.core.Application;
  * 文章： https://www.baeldung.com/java-ee-oauth2-implementation
  */
 @ApplicationPath("/auth")
-public class RestApplication extends Application {
+public class AuthorizationServerApplication extends Application {
 }
