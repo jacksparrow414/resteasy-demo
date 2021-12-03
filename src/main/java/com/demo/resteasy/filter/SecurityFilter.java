@@ -93,7 +93,7 @@ public class SecurityFilter implements ContainerRequestFilter {
         }
     }
 
-    public  JWSVerifier generateRsaJwsVerifier() throws Exception{
+    private JWSVerifier generateRsaJwsVerifier() throws Exception{
         String pemEncodedRSAPrivateKey = PEMKeyUtils.readKeyAsString("rsa/publish-key.pem");
         RSAKey rsaKey = (RSAKey) JWK.parseFromPEMEncodedObjects(pemEncodedRSAPrivateKey);
         return new RSASSAVerifier(rsaKey);

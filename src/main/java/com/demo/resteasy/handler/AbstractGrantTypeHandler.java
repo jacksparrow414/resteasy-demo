@@ -29,10 +29,16 @@ public abstract class AbstractGrantTypeHandler implements AuthorizationGrantType
 
     private static final JWSHeader jwsHeader = new JWSHeader.Builder(JWSAlgorithm.RS256).type(JOSEObjectType.JWT).build();
 
-    public JWSSigner generateRsaJwsSigner() throws Exception{
+    private JWSSigner generateRsaJwsSigner() throws Exception{
         String pemEncodedRSAPrivateKey = PEMKeyUtils.readKeyAsString("rsa/private-key.pem");
         RSAKey rsaKey = (RSAKey) JWK.parseFromPEMEncodedObjects(pemEncodedRSAPrivateKey);
         return new RSASSASigner(rsaKey.toRSAPrivateKey());
+    }
+
+    protected JWSVerifier generateRsaJwsVerifier() throws Exception{
+        String pemEncodedRSAPrivateKey = PEMKeyUtils.readKeyAsString("rsa/publish-key.pem");
+        RSAKey rsaKey = (RSAKey) JWK.parseFromPEMEncodedObjects(pemEncodedRSAPrivateKey);
+        return new RSASSAVerifier(rsaKey);
     }
 
     protected String generateAccessToken(String clientId, String subject, String approvedScope) throws Exception{
