@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
+import javax.annotation.security.DenyAll;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -50,6 +51,7 @@ public class HelloResource {
     @GET
     @Path("{name}")
     @Produces(MediaType.TEXT_PLAIN)
+    @DenyAll
     public String hello(@PathParam("name") String name) {
         return "Hello " + name.toUpperCase();
     }
@@ -63,6 +65,7 @@ public class HelloResource {
     @GET
     @Path("advanced/{name}")
     @Produces(MediaType.TEXT_PLAIN)
+    @DenyAll
     public String helloRestEasy(@org.jboss.resteasy.annotations.jaxrs.PathParam String name) {
         return "Hi,there " + name;
     }
@@ -74,6 +77,7 @@ public class HelloResource {
     @Path("users")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @DenyAll
     public Response createUser(@Valid UserVO userVO) {
         users.add(userVO);
         return Response.ok().entity(userVO).build();
@@ -85,6 +89,7 @@ public class HelloResource {
     @GET
     @Path("users/{index}")
     @Produces(MediaType.APPLICATION_JSON)
+    @DenyAll
     public Response queryUser(@PathParam("index") Integer index) {
         checkParameter(index);
         UserVO targetUser = users.get(index);
@@ -96,6 +101,7 @@ public class HelloResource {
      */
     @DELETE
     @Path("users/{index}")
+    @DenyAll
     public Response deleteUser(@PathParam("index") Integer index) {
         checkParameter(index);
         users.remove(index);
@@ -115,6 +121,7 @@ public class HelloResource {
     @POST
     @Path("users")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @DenyAll
     public Response createFromFrom(@Form UserVO userVO) {
         if (Objects.isNull(userVO)) {
             throw new WebApplicationException(Status.BAD_REQUEST);
@@ -130,6 +137,7 @@ public class HelloResource {
     @POST
     @Path("file")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @DenyAll
     public Response uploadImage(MultipartFormDataInput input) {
         //Get API input data
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
@@ -197,6 +205,7 @@ public class HelloResource {
     @GET
     @Path("file/{fileName}")
     @Produces("image/png")
+    @DenyAll
     public Response downLoadImage(@org.jboss.resteasy.annotations.jaxrs.PathParam String fileName) {
         if(fileName == null || fileName.isEmpty()) {
             ResponseBuilder response = Response.status(Status.BAD_REQUEST);

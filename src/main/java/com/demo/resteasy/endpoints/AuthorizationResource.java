@@ -6,6 +6,7 @@ import com.demo.resteasy.model.Client;
 import com.demo.resteasy.model.User;
 import net.bytebuddy.utility.RandomString;
 
+import javax.annotation.security.DenyAll;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -46,6 +47,7 @@ public class AuthorizationResource {
      * @throws IOException
      */
     @GET
+    @DenyAll
     public Response applyForUserAuthorization(@Context HttpServletRequest request,
                                       @Context HttpServletResponse response,
                                       @Context UriInfo uriInfo) throws ServletException, IOException {
@@ -121,6 +123,7 @@ public class AuthorizationResource {
         return null;
     }
 
+    @DenyAll
     @POST
     @Produces(MediaType.TEXT_PLAIN)
     public Response userAuthorization(@Context HttpServletRequest request,

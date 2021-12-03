@@ -1,20 +1,26 @@
 package com.demo.resteasy.handler;
 
+import com.demo.resteasy.model.AppDataRepository;
 import com.demo.resteasy.model.AuthorizationCode;
+import com.demo.resteasy.model.User;
 import com.demo.resteasy.util.JPAUtil;
 import com.demo.resteasy.vo.TokenVO;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MultivaluedMap;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Named("authorization_code")
 public class AuthorizationCodeGrantTypeHandler extends AbstractGrantTypeHandler{
 
     private EntityManager entityManager = JPAUtil.acquireEntityManager();
 
+    @Inject
+    private AppDataRepository appDataRepository;
 
     @Override
     public TokenVO createAccessToken(String clientId, MultivaluedMap<String, String> params) throws Exception {
