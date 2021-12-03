@@ -1,7 +1,8 @@
-package com.demo.resteasy.endpoints;
+package org.demo.resteasy.endpoints;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -24,7 +25,7 @@ public class UserResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_PLAIN)
     @RolesAllowed("resource.write")
-    public String writeProtectedInfo(String writeInfo) {
+    public String writeProtectedInfo(@FormParam("writeInfo") String writeInfo) {
         return "Write Success \n" + writeInfo;
     }
 }
