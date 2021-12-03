@@ -28,6 +28,8 @@
         <h2.databse.version>1.4.200</h2.databse.version>
         <nimbus-jose-jwt.version>9.15.2</nimbus-jose-jwt.version>
         <jackson.version>2.13.0</jackson.version>
+        <weld.version>3.1.8.Final</weld.version>
+        <bouncycastle.version>1.69</bouncycastle.version>
     </properties>
 
     <dependencies>
@@ -107,7 +109,7 @@
         <dependency>
             <groupId>org.jboss.weld.servlet</groupId>
             <artifactId>weld-servlet-core</artifactId>
-            <version>3.1.8.Final</version>
+            <version>${weld.version}</version>
         </dependency>
 <!--restea-->
         <dependency>
@@ -125,12 +127,12 @@
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk15on</artifactId>
-            <version>1.69</version>
+            <version>${bouncycastle.version}</version>
         </dependency>
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcpkix-jdk15on</artifactId>
-            <version>1.69</version>
+            <version>${bouncycastle.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
