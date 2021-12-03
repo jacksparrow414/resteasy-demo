@@ -5,7 +5,9 @@ import com.nimbusds.jose.JOSEObjectType;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.JWSSigner;
+import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.RSASSASigner;
+import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jwt.JWTClaimsSet;
@@ -33,7 +35,7 @@ public abstract class AbstractGrantTypeHandler implements AuthorizationGrantType
         return new RSASSASigner(rsaKey.toRSAPrivateKey());
     }
 
-    public String generateAccessToken(String clientId, String subject, String approvedScope) throws Exception{
+    protected String generateAccessToken(String clientId, String subject, String approvedScope) throws Exception{
         Calendar calendar = Calendar.getInstance();
         Date signTimeTime = calendar.getTime();
         calendar.add(Calendar.MILLISECOND, expiresInMilliseconds);
@@ -56,7 +58,7 @@ public abstract class AbstractGrantTypeHandler implements AuthorizationGrantType
         return result;
     }
 
-    public String generateRefreshToken(String clientId, String subject, String approvedScope) throws Exception{
+    protected String generateRefreshToken(String clientId, String subject, String approvedScope) throws Exception{
         JWSSigner jwsSigner = generateRsaJwsSigner();
         Calendar now = Calendar.getInstance();
         now.add(Calendar.DATE, 1);

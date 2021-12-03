@@ -7,6 +7,7 @@ import com.demo.resteasy.vo.TokenErrorVO;
 import com.demo.resteasy.vo.TokenVO;
 import lombok.extern.java.Log;
 
+import javax.annotation.security.DenyAll;
 import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.literal.NamedLiteral;
 import javax.inject.Inject;
@@ -39,6 +40,7 @@ public class TokenResource {
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
+    @DenyAll
     public Response token(@HeaderParam(HttpHeaders.AUTHORIZATION) String authHeader,
                           MultivaluedMap<String, String> params) {
         //Check grant_type params

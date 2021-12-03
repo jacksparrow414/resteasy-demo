@@ -7,13 +7,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.security.Principal;
 
 @Entity
 @Table(name = "user")
 @Getter
 @Setter
-public class User implements Principal {
+public class User implements Serializable {
     @Id
     @Column(name = "user_id")
     private String userId;
@@ -23,10 +24,4 @@ public class User implements Principal {
     private String roles;
     @Column(name = "scopes")
     private String scopes;
-
-
-    @Override
-    public String getName() {
-        return getUserId();
-    }
 }
