@@ -46,7 +46,7 @@ public class HelloResource {
     private static List<UserVO> users = new ArrayList<>();
 
     /**
-     * curl http:localhost:8080/rest/hello/jack
+     * curl http:localhost:8080/auth/hello/jack
      */
     @GET
     @Path("{name}")
@@ -60,7 +60,7 @@ public class HelloResource {
      * RestEasy提供了高级的@PathParam注解，可以不不用声明path的值，只要变量名字和路径变量一致即可
      * <a href="https://docs.jboss.org/resteasy/docs/3.8.1.Final/userguide/html/_NewParam.html">使用文档</a>
      *  搭配Maven compiler插件使用
-     *  curl http:localhost:8080/rest/hello/advanced/jack
+     *  curl http:localhost:8080/auth/hello/advanced/jack
      */
     @GET
     @Path("advanced/{name}")
@@ -71,7 +71,7 @@ public class HelloResource {
     }
 
     /**
-     * curl -X POST -H 'Content-Type: application/json' -d '{"userName":"jack", "age":18"}' http://localhost:8080/rest/hello/users
+     * curl -X POST -H 'Content-Type: application/json' -d '{"userName":"jack", "age":18"}' http://localhost:8080/auth/hello/users
      */
     @POST
     @Path("users")
@@ -84,7 +84,7 @@ public class HelloResource {
     }
 
     /**
-     * curl http:localhost:8080/rest/hello/users/0
+     * curl http:localhost:8080/auth/hello/users/0
      */
     @GET
     @Path("users/{index}")
@@ -97,7 +97,7 @@ public class HelloResource {
     }
 
     /**
-     * curl -X DELETE http://localhost:8080/rest/hello/users/0
+     * curl -X DELETE http://localhost:8080/auth/hello/users/0
      */
     @DELETE
     @Path("users/{index}")
@@ -116,7 +116,7 @@ public class HelloResource {
 
     /**
      * 接收表单类型数据
-     * curl -X POST -d 'username=jack&age=18' http://localhost/rest/hello/users
+     * curl -X POST -d 'username=jack&age=18' http://localhost/auth/hello/users
      */
     @POST
     @Path("users")
@@ -132,7 +132,7 @@ public class HelloResource {
 
     /**
      * 接受一个或多个文件.
-     * curl -F 'fileName=@pictureLocation/upload.png' http://localhost:8080/rest/hello/file
+     * curl -F 'fileName=@pictureLocation/upload.png' http://localhost:8080/auth/hello/file
      */
     @POST
     @Path("file")
@@ -198,7 +198,7 @@ public class HelloResource {
     }
 
     /**
-     * curl -o download.png http://localhost:8080/rest/hello/file/upload.png
+     * curl -o download.png http://localhost:8080/auth/hello/file/upload.png
      * @param fileName
      * @return
      */
