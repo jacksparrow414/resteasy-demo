@@ -11,6 +11,7 @@
         <module>authorization-server</module>
         <module>authorization-common</module>
         <module>resource-server</module>
+        <module>thirdparty-server</module>
     </modules>
     <packaging>pom</packaging>
 

@@ -112,7 +112,9 @@ public class AuthorizationResource {
         Set<String> rScopes = new HashSet(Arrays.asList(requestedScope.split(" ")));
         Set<String> uScopes = new HashSet(Arrays.asList(userScopes.split(" ")));
         for (String scope : uScopes) {
-            if (rScopes.contains(scope)) allowedScopes.add(scope);
+            if (rScopes.contains(scope)) {
+                allowedScopes.add(scope);
+            }
         }
         return String.join(" ", allowedScopes);
     }
@@ -134,7 +136,7 @@ public class AuthorizationResource {
             return informUserAboutError(request, response, "No pending authorization request.");
         }
 //        String redirectUri = originalParams.getFirst("resolved_redirect_uri");
-        String redirectUri = "http://localhost:9180/callback";
+        String redirectUri = "http://localhost:8080/thirdparty-server/apply/callback";
         StringBuilder sb = new StringBuilder(redirectUri);
 
         String approvalStatus = params.getFirst("approval_status");
