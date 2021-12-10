@@ -11,6 +11,7 @@ import org.demo.resteasy.util.PEMKeyUtils;
 
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.RolesAllowed;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
@@ -37,15 +38,53 @@ public class SecurityFilter implements ContainerRequestFilter {
     @Context
     private ResourceInfo resourceInfo;
 
+
+//    @Context
+//    private HttpServletRequest httpServletRequest;
+
     @Override
     @SneakyThrows
     public void filter(ContainerRequestContext containerRequestContext) throws IOException {
         Method method = resourceInfo.getResourceMethod();
-        // no need to check permissions
+        //TODO: Question 还没找到解决方案，使用httpServletRequest的话，表单提交那里获取不到参数
+//        String userId = httpServletRequest.getParameter("userId");
+        String userId = "appuser";
+        // 构造SecurityContext， 以便AuthorizationResource使用
+        if (userId != null && userId.length() > 0) {
+            containerRequestContext.setSecurityContext(new SecurityContext() {
+                @Override
+                public Principal getUserPrincipal() {
+                    return () -> userId;
+                }
+
+                @Override
+                public boolean isUserInRole(String role) {
+                    return false;
+                }
+
+                @Override
+                public boolean isSecure() {
+                    return false;
+                }
+
+                @Override
+                public String getAuthenticationScheme() {
+                    return "CLIENT_CERT";
+                }
+            });
+            return;
+        }
+         // no need to check permissions
         if (method.isAnnotationPresent(DenyAll.class)) {
             log.info("no need to check permission");
             return;
         }
+        // 特殊情况都处理完毕之后,开始正常处理token的解析和权限的校验
+        verifyTokenAndPermission(containerRequestContext, method);
+    }
+
+    @SneakyThrows
+    private void verifyTokenAndPermission(final ContainerRequestContext containerRequestContext, final Method method) {
         MultivaluedMap<String, String> headers = containerRequestContext.getHeaders();
         List<String> authorization = headers.get("Authorization");
         String token = authorization.get(0).substring("Bearer".length()).trim();

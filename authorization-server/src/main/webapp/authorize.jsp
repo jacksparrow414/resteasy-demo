@@ -28,7 +28,7 @@
     <p><h3>Want to Authorize scopes for client : ${client.clientId} ?</h3></p>
     <hr>
 
-    <form method="post" action="authorize">
+    <form method="post" action="authorize?userId=appuser">
         <table>
             <tr>
                 <td valign="top">Scopes :</td>
