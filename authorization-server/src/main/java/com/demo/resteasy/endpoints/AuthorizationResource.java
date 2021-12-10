@@ -5,6 +5,7 @@ import com.demo.resteasy.model.AuthorizationCode;
 import com.demo.resteasy.model.Client;
 import com.demo.resteasy.model.User;
 import net.bytebuddy.utility.RandomString;
+import org.h2.util.StringUtils;
 
 import javax.annotation.security.DenyAll;
 import javax.inject.Inject;
@@ -14,9 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
@@ -25,9 +24,12 @@ import java.io.IOException;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Path("authorize")
@@ -35,6 +37,8 @@ public class AuthorizationResource {
 
     @Inject
     private AppDataRepository appDataRepository;
+
+    private static Map<Integer, String> stateMap = new HashMap<>();
 
     /**
      * 申请用户授权.
@@ -52,6 +56,10 @@ public class AuthorizationResource {
                                       @Context HttpServletResponse response,
                                       @Context UriInfo uriInfo) throws ServletException, IOException {
         MultivaluedMap<String, String> params = uriInfo.getQueryParameters();
+        String state = params.getFirst("state");
+        if (state.length() > 0) {
+            stateMap.put(1, state);
+        }
         //1. client_id
         String clientId = params.getFirst("client_id");
         if (clientId == null || clientId.isEmpty()) {
@@ -127,25 +135,24 @@ public class AuthorizationResource {
 
     @DenyAll
     @POST
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response userAuthorization(@Context HttpServletRequest request,
+    public void userAuthorization(@Context HttpServletRequest request,
                                       @Context HttpServletResponse response,
                                       MultivaluedMap<String, String> params) throws ServletException, IOException {
         MultivaluedMap<String, String> originalParams = (MultivaluedMap<String, String>) request.getSession().getAttribute("ORIGINAL_PARAMS");
         if (originalParams == null) {
-            return informUserAboutError(request, response, "No pending authorization request.");
+             informUserAboutError(request, response, "No pending authorization request.");
         }
 //        String redirectUri = originalParams.getFirst("resolved_redirect_uri");
-        String redirectUri = "http://localhost:8080/thirdparty-server/apply/callback";
+        String redirectUri = "http://localhost:8080/thirdparty-server/third/apply/callback";
         StringBuilder sb = new StringBuilder(redirectUri);
-
+        sb.append("?state=").append(stateMap.get(1));
         String approvalStatus = params.getFirst("approval_status");
         if ("NO".equals(approvalStatus)) {
             URI location = UriBuilder.fromUri(sb.toString())
                     .queryParam("error", "User doesn't approved the request.")
                     .queryParam("error_description", "User doesn't approved the request.")
                     .build();
-            return Response.seeOther(location).build();
+             Response.seeOther(location).build();
         }
 
         //==> YES
@@ -155,7 +162,7 @@ public class AuthorizationResource {
                     .queryParam("error", "User doesn't approved the request.")
                     .queryParam("error_description", "User doesn't approved the request.")
                     .build();
-            return Response.seeOther(location).build();
+             Response.seeOther(location).build();
         }
         String responseType = originalParams.getFirst("response_type");
         String clientId = originalParams.getFirst("client_id");
@@ -171,9 +178,9 @@ public class AuthorizationResource {
             authorizationCode.setRedirectUrl(redirectUri);
             appDataRepository.save(authorizationCode);
             String code = authorizationCode.getCode();
-            sb.append("?code=").append(code);
+            sb.append("&code=").append(code);
         }
         // 回调第三方应用
-        return Response.ok().entity(sb.toString()).build();
+        response.sendRedirect(sb.toString());
     }
 }
