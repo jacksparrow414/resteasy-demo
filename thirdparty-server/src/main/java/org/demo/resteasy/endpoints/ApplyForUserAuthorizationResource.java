@@ -51,7 +51,8 @@ public class ApplyForUserAuthorizationResource {
         String authorizationLocation = authorizationUri + "?response_type=code"
             + "&client_id=" + clientId
             + "&redirect_uri=" + redirectUri
-            + "&state=" + state;
+            + "&state=" + state
+                +"&userId=" + "appuser";
         response.sendRedirect(authorizationLocation);
     }
     
@@ -78,7 +79,7 @@ public class ApplyForUserAuthorizationResource {
         }
     
         String code = request.getParameter("code");
-    
+        // 内部直接调用authorization-server获取token
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target("http://localhost:8080/authorization-server/auth/token");
     
@@ -91,8 +92,10 @@ public class ApplyForUserAuthorizationResource {
             .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE), TokenVO.class);
 
         request.setAttribute("token", tokenResponse);
-        // 浏览器URL不会改变
+        // TODO: 浏览器URL不会改变
         // https://stackoverflow.com/questions/29645344/null-pointer-exception-in-response-sendredirect
+
+        // 将获取到的token显示在页面上
         request.getRequestDispatcher("/success.jsp").forward(request, response);
         return null;
     

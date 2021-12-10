@@ -5,28 +5,30 @@ import com.demo.resteasy.model.AuthorizationCode;
 import com.demo.resteasy.model.Client;
 import com.demo.resteasy.model.User;
 import net.bytebuddy.utility.RandomString;
-import org.h2.util.StringUtils;
 
 import javax.annotation.security.DenyAll;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
 import java.net.URI;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +39,9 @@ public class AuthorizationResource {
 
     @Inject
     private AppDataRepository appDataRepository;
+
+    @Context
+    private SecurityContext securityContext;
 
     private static Map<Integer, String> stateMap = new HashMap<>();
 
@@ -57,6 +62,7 @@ public class AuthorizationResource {
                                       @Context UriInfo uriInfo) throws ServletException, IOException {
         MultivaluedMap<String, String> params = uriInfo.getQueryParameters();
         String state = params.getFirst("state");
+        // TODO: 实际业务中使用其他方式存储
         if (state.length() > 0) {
             stateMap.put(1, state);
         }
@@ -71,7 +77,6 @@ public class AuthorizationResource {
             return informUserAboutError(request, response, "Invalid client_id :" + clientId);
         }
         //2. Client Authorized Grant Type
-        String clientError = "";
         if (client.getAuthorizedGrantTypes() != null && !client.getAuthorizedGrantTypes().contains("authorization_code")) {
             return informUserAboutError(request, response, "Authorization Grant type, authorization_code, is not allowed for this client :" + clientId);
         }
@@ -95,8 +100,7 @@ public class AuthorizationResource {
         //4. response_type
         String responseType = params.getFirst("response_type");
         if (!"code".equals(responseType) && !"token".equals(responseType)) {
-            //error = "invalid_grant :" + responseType + ", response_type params should be code or token:";
-            //return informUserAboutError(error);
+            return informUserAboutError(request, response, "invalid_grant :" + responseType + ", response_type params should be code or token:");
         }
         //Save params in session
         request.getSession().setAttribute("ORIGINAL_PARAMS", params);
@@ -106,11 +110,12 @@ public class AuthorizationResource {
         if (requestedScope == null || requestedScope.isEmpty()) {
             requestedScope = client.getScopes();
         }
-//        Principal principal = securityContext.getCallerPrincipal();
-//        User user = appDataRepository.getUser(principal.getName());
-        User user = appDataRepository.getUser("appuser");
+        //5. user principal, common userId
+        Principal principal = securityContext.getUserPrincipal();
+        User user = appDataRepository.getUser(principal.getName());
         String allowedScopes = checkUserScopes(user.getScopes(), requestedScope);
         request.setAttribute("scopes", allowedScopes);
+        // 转发至授权页面
         request.getRequestDispatcher("/authorize.jsp").forward(request, response);
         return null;
     }
@@ -135,6 +140,7 @@ public class AuthorizationResource {
 
     @DenyAll
     @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void userAuthorization(@Context HttpServletRequest request,
                                       @Context HttpServletResponse response,
                                       MultivaluedMap<String, String> params) throws ServletException, IOException {
@@ -167,8 +173,7 @@ public class AuthorizationResource {
         String responseType = originalParams.getFirst("response_type");
         String clientId = originalParams.getFirst("client_id");
         if ("code".equals(responseType)) {
-//            String userId = securityContext.getCallerPrincipal().getName();
-            String userId = "appuser";
+            String userId = securityContext.getUserPrincipal().getName();
             AuthorizationCode authorizationCode = new AuthorizationCode();
             authorizationCode.setCode(RandomString.make(15));
             authorizationCode.setClientId(clientId);
