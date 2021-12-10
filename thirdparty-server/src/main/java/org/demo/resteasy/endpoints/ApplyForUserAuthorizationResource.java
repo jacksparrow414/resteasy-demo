@@ -30,8 +30,8 @@ import org.demo.resteasy.vo.TokenVO;
 @Path("apply")
 @Log
 public class ApplyForUserAuthorizationResource {
-    
-    
+
+    private static String redirectUri = "http://localhost:8080/thirdparty-server/third/apply/callback";
     @POST
     @SneakyThrows
     public void login(@Context HttpServletRequest request,
@@ -43,9 +43,9 @@ public class ApplyForUserAuthorizationResource {
         String state = UUID.randomUUID().toString();
         request.getSession().setAttribute("CLIENT_LOCAL_STATE", state);
     
-        String authorizationUri = "http://localhost:8080/authorization-server/authorize";
+        String authorizationUri = "http://localhost:8080/authorization-server/auth/authorize";
         String clientId = "webappclient";
-        String redirectUri = "http://localhost:8080/thirdparty-server/apply/callback";
+
 //        String scope = config.getValue("client.scope", String.class);
     
         String authorizationLocation = authorizationUri + "?response_type=code"
@@ -57,6 +57,8 @@ public class ApplyForUserAuthorizationResource {
     
     @GET
     @Path("callback")
+    @Produces(MediaType.APPLICATION_JSON)
+    @SneakyThrows
     public Response callback(@Context HttpServletRequest request,
                              @Context HttpServletResponse response) {
     
@@ -78,19 +80,21 @@ public class ApplyForUserAuthorizationResource {
         String code = request.getParameter("code");
     
         Client client = ClientBuilder.newClient();
-        WebTarget target = client.target("http://localhost:8080/authorization-server/token");
+        WebTarget target = client.target("http://localhost:8080/authorization-server/auth/token");
     
         Form form = new Form();
         form.param("grant_type", "authorization_code");
         form.param("code", code);
+        form.param("redirect_uri", redirectUri);
         TokenVO tokenResponse = target.request(MediaType.APPLICATION_JSON_TYPE)
             .header(HttpHeaders.AUTHORIZATION, getAuthorizationHeaderValue(clientId, clientSecret))
             .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE), TokenVO.class);
-        
-        return Response
-            .ok()
-            .entity(tokenResponse)
-            .build();
+
+        request.setAttribute("token", tokenResponse);
+        // 浏览器URL不会改变
+        // https://stackoverflow.com/questions/29645344/null-pointer-exception-in-response-sendredirect
+        request.getRequestDispatcher("/success.jsp").forward(request, response);
+        return null;
     
     }
     
