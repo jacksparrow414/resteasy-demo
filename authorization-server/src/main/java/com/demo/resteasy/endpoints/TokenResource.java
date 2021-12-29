@@ -80,6 +80,9 @@ public class TokenResource {
     }
 
     private String[] extract(String authHeader) {
+        // 认证为Basic时， 其格式为用户名+冒号+密码,然后base64编码的一个字符串 https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization
+        // 类似于这样 Authorization: Basic YWxhZGRpbjpvcGVuc2VzYW1l
+        // 其他type见文档 https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#authentication_schemes
         if (authHeader != null && authHeader.startsWith("Basic ")) {
             return new String(Base64.getDecoder().decode(authHeader.substring(6))).split(":");
         }
