@@ -7,6 +7,7 @@ import com.demo.resteasy.model.User;
 import net.bytebuddy.utility.RandomString;
 
 import javax.annotation.security.DenyAll;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +35,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * 这里把所有权限相关的注解全部注释掉的原因是，
+ * 1、 认证服务器和资源服务器用于公司内部平台使用，不对外提供服务.
+ * 2、 认证服务器和资源服务器对外提供服务，授权的时候还需要加一步用户登录。那么这一步可能的思路是：采用OAuth2-password模式登录，登录成功之后再拉起授权页面
+ */
 @Path("authorize")
+@RequestScoped
 public class AuthorizationResource {
 
     @Inject
@@ -56,7 +63,7 @@ public class AuthorizationResource {
      * @throws IOException
      */
     @GET
-    @DenyAll
+//    @DenyAll
     public Response applyForUserAuthorization(@Context HttpServletRequest request,
                                       @Context HttpServletResponse response,
                                       @Context UriInfo uriInfo) throws ServletException, IOException {
@@ -116,6 +123,7 @@ public class AuthorizationResource {
         String allowedScopes = checkUserScopes(user.getScopes(), requestedScope);
         request.setAttribute("scopes", allowedScopes);
         // 转发至授权页面
+        // TODO 实际情况可能要更复杂一些，这里其实是假设用户已登录的情况下。所以还差一个用户未登录时需要用户先登录再拉起授权页面. 如最上面的注释
         request.getRequestDispatcher("/authorize.jsp").forward(request, response);
         return null;
     }
@@ -138,7 +146,7 @@ public class AuthorizationResource {
         return null;
     }
 
-    @DenyAll
+//    @DenyAll
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void userAuthorization(@Context HttpServletRequest request,

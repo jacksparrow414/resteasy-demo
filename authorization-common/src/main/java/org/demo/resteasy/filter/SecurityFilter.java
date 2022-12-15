@@ -11,7 +11,6 @@ import org.demo.resteasy.util.PEMKeyUtils;
 
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.RolesAllowed;
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
@@ -30,6 +29,7 @@ import java.util.Map;
 
 /**
  * verify token and parse token from request
+ * 通过全局Filter，可以达到根据角色判断是否有权限
  */
 @Log
 @Provider
@@ -39,41 +39,10 @@ public class SecurityFilter implements ContainerRequestFilter {
     private ResourceInfo resourceInfo;
 
 
-//    @Context
-//    private HttpServletRequest httpServletRequest;
-
     @Override
     @SneakyThrows
     public void filter(ContainerRequestContext containerRequestContext) throws IOException {
         Method method = resourceInfo.getResourceMethod();
-        //TODO: Question 还没找到解决方案，使用httpServletRequest的话，表单提交那里获取不到参数
-//        String userId = httpServletRequest.getParameter("userId");
-        String userId = "appuser";
-        // 构造SecurityContext， 以便AuthorizationResource使用
-        if (userId != null && userId.length() > 0) {
-            containerRequestContext.setSecurityContext(new SecurityContext() {
-                @Override
-                public Principal getUserPrincipal() {
-                    return () -> userId;
-                }
-
-                @Override
-                public boolean isUserInRole(String role) {
-                    return false;
-                }
-
-                @Override
-                public boolean isSecure() {
-                    return false;
-                }
-
-                @Override
-                public String getAuthenticationScheme() {
-                    return "CLIENT_CERT";
-                }
-            });
-            return;
-        }
          // no need to check permissions
         if (method.isAnnotationPresent(DenyAll.class)) {
             log.info("no need to check permission");
@@ -95,7 +64,10 @@ public class SecurityFilter implements ContainerRequestFilter {
             containerRequestContext.abortWith(buildResponse(Response.Status.FORBIDDEN));
         }
         Map<String, Object> claims = jwt.getJWTClaimsSet().getClaims();
-        String userId = jwt.getJWTClaimsSet().getSubject();
+
+        // 这里第三方平台和认证服务器之间的user通过unionId关联，第三方平台数据库的用户表的关系 user_id , union_id
+        // 如果认证服务器只是内部使用的话，也可以是userId
+        String unionId = jwt.getJWTClaimsSet().getSubject();
         String scopes = (String) claims.get("scope");
         log.info("scopes is:\n" + scopes);
         List<String> parsedScopes = Arrays.asList(scopes.split("\\s+"));
@@ -111,7 +83,7 @@ public class SecurityFilter implements ContainerRequestFilter {
             containerRequestContext.setSecurityContext(new SecurityContext() {
                 @Override
                 public Principal getUserPrincipal() {
-                    return () -> userId;
+                    return () -> unionId;
                 }
 
                 @Override

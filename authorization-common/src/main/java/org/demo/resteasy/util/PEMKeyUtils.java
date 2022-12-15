@@ -3,6 +3,7 @@ package org.demo.resteasy.util;
 import org.apache.commons.io.IOUtils;
 
 import java.io.InputStream;
+import java.nio.charset.Charset;
 
 public class PEMKeyUtils {
 
@@ -15,7 +16,7 @@ public class PEMKeyUtils {
     public static String readKeyAsString(String keyLocation) throws Exception {
 
         InputStream inputStream = PEMKeyUtils.class.getClassLoader().getResourceAsStream(keyLocation);
-        return IOUtils.toString(inputStream);
+        return IOUtils.toString(inputStream, Charset.defaultCharset());
 
         // 下面这种写法在同一个工程下没问题，但是打成jar之后读取resource文件会有问题,解决方案见注释
 //        URI uri = currentThread().getContextClassLoader().getResource(keyLocation).toURI();
