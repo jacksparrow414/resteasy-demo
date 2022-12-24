@@ -6,23 +6,23 @@ import com.demo.resteasy.model.Client;
 import com.demo.resteasy.model.User;
 import net.bytebuddy.utility.RandomString;
 
-import javax.annotation.security.DenyAll;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
-import javax.ws.rs.core.UriBuilder;
-import javax.ws.rs.core.UriInfo;
+import jakarta.annotation.security.DenyAll;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MultivaluedMap;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.SecurityContext;
+import jakarta.ws.rs.core.UriBuilder;
+import jakarta.ws.rs.core.UriInfo;
 import java.io.IOException;
 import java.net.URI;
 import java.security.Principal;
@@ -117,9 +117,10 @@ public class AuthorizationResource {
         if (requestedScope == null || requestedScope.isEmpty()) {
             requestedScope = client.getScopes();
         }
-        //5. user principal, common userId
-        Principal principal = securityContext.getUserPrincipal();
-        User user = appDataRepository.getUser(principal.getName());
+        //5. user principal, common userId,这里不再使用SecurityFilter
+//        Principal principal = securityContext.getUserPrincipal();
+//        String userId = principal.getName();
+        User user = appDataRepository.getUser("appuser");
         String allowedScopes = checkUserScopes(user.getScopes(), requestedScope);
         request.setAttribute("scopes", allowedScopes);
         // 转发至授权页面
@@ -181,7 +182,8 @@ public class AuthorizationResource {
         String responseType = originalParams.getFirst("response_type");
         String clientId = originalParams.getFirst("client_id");
         if ("code".equals(responseType)) {
-            String userId = securityContext.getUserPrincipal().getName();
+//            String userId = securityContext.getUserPrincipal().getName();
+            String userId = "appuser";
             AuthorizationCode authorizationCode = new AuthorizationCode();
             authorizationCode.setCode(RandomString.make(15));
             authorizationCode.setClientId(clientId);

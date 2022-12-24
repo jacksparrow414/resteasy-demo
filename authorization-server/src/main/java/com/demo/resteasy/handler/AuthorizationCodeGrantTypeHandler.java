@@ -6,11 +6,11 @@ import com.demo.resteasy.model.User;
 import com.demo.resteasy.util.JPAUtil;
 import com.demo.resteasy.vo.TokenVO;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.persistence.EntityManager;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.MultivaluedMap;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.persistence.EntityManager;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.MultivaluedMap;
 import java.time.LocalDateTime;
 import java.util.Objects;
 

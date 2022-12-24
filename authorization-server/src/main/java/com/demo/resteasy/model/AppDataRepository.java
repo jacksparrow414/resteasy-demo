@@ -2,7 +2,7 @@ package com.demo.resteasy.model;
 
 import com.demo.resteasy.util.JPAUtil;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 
 
 public class AppDataRepository {

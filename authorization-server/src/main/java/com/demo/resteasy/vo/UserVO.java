@@ -1,13 +1,13 @@
 package com.demo.resteasy.vo;
 
 ;
-import javax.ws.rs.FormParam;
+import jakarta.ws.rs.FormParam;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 @Getter
 @Setter

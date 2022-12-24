@@ -2,7 +2,7 @@ package com.demo.resteasy.config;
 
 import lombok.SneakyThrows;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import java.io.FileInputStream;
 import java.util.Objects;
 import java.util.Properties;

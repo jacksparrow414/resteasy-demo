@@ -2,7 +2,7 @@ package com.demo.resteasy.handler;
 
 import com.demo.resteasy.vo.TokenVO;
 
-import javax.ws.rs.core.MultivaluedMap;
+import jakarta.ws.rs.core.MultivaluedMap;
 
 public interface AuthorizationGrantTypeHandler {
     /**

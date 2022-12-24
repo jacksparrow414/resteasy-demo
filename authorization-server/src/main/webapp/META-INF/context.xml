@@ -7,10 +7,17 @@
 <!--    在Tomcat使用Weld-->
 <!--    https://balusc.omnifaces.org/2013/10/how-to-install-cdi-in-tomcat.html-->
 <!--    https://docs.jboss.org/weld/reference/latest-3.1/en-US/html_single/#_tomcat-->
+<!--    <Resource name="BeanManager"-->
+<!--              auth="Container"-->
+<!--              type="javax.enterprise.inject.spi.BeanManager"-->
+<!--              factory="org.jboss.weld.resources.ManagerObjectFactory" />-->
+
+<!--    查看Weld文档中Application servers and environments supported by Weld 一节-->
     <Resource name="BeanManager"
               auth="Container"
-              type="javax.enterprise.inject.spi.BeanManager"
+              type="jakarta.enterprise.inject.spi.BeanManager"
               factory="org.jboss.weld.resources.ManagerObjectFactory" />
+
 <!--    不需要修改Tomcat server.xml-->
     <Resource name="jdbc/myLocalJPADB"
               auth="Container"
