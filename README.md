@@ -16,4 +16,4 @@
 ## 数据库
 [H2](https://www.h2database.com/html/main.html)
 ## Server
-[Tomcat9](https://tomcat.apache.org/download-90.cgi),因为Tomcat9支持Servlet4
+Tomcat10,因为Tomcat10支持Servlet6
