@@ -12,6 +12,7 @@
         <module>authorization-common</module>
         <module>resource-server</module>
         <module>thirdparty-server</module>
+        <module>validation-demo</module>
     </modules>
     <packaging>pom</packaging>
 
