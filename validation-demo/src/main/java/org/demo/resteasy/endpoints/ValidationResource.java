@@ -24,8 +24,8 @@ import org.demo.resteasy.vo.Person;
 @Log
 public class ValidationResource {
     
-    @Inject
-    Validator validator;
+//    @Inject
+//    Validator validator;
     
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -39,10 +39,10 @@ public class ValidationResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response validateMessageByValidator(Person person) {
-        Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
-        constraintViolations.forEach(item -> {
-            log.info(item.getMessage());
-        });
+//        Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+//        constraintViolations.forEach(item -> {
+//            log.info(item.getMessage());
+//        });
         return Response.ok().build();
     }
 }
