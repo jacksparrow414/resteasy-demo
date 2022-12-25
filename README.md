@@ -1,5 +1,14 @@
 # RestEasy-OAuth-demo
 
+## 各组件升级日志
+
+- 源码的JDK已经升级到JDK11
+- Servlet4升级到Servlet6，包名从javax全部变更为jakarta，web.xml的描述符也已经修改
+- JSTL升级至2.0
+- Tomcat9升级到Tomcat10
+- Hibernate、Jackson均已升级
+- Weld CDI已经升级至最新，并更新了webapp/META-INF/context.xml下的相关配置
+
 ## 参考实现
 [参考实现的文章](https://www.baeldung.com/java-ee-oauth2-implementation)
 
