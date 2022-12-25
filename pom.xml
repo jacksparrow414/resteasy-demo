@@ -51,6 +51,12 @@
             <groupId>org.glassfish.web</groupId>
             <artifactId>jakarta.servlet.jsp.jstl</artifactId>
             <version>2.0.0</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+                    <groupId>jakarta.servlet.jsp.jstl</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
 
@@ -73,6 +79,11 @@
                     <groupId>org.jboss.logging</groupId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator-cdi</artifactId>
+            <version>${hibernate.validator.version}</version>
         </dependency>
 
         <dependency>
@@ -168,7 +179,7 @@
 
         <dependency>
             <groupId>org.jboss.weld.servlet</groupId>
-            <artifactId>weld-servlet-shaded</artifactId>
+            <artifactId>weld-servlet-core</artifactId>
             <version>${weld.version}</version>
         </dependency>
 <!--resteasy-->
