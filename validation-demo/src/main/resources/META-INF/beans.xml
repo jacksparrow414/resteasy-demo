@@ -1,0 +1,5 @@
+<!--https://docs.jboss.org/weld/reference/latest/en-US/html_single/#_understanding_the_code-->
+<!--可以是一个空文件-->
+<!--此外文件的位置可以是resources/META-INF/beans.xml 也可是WEB-INF/beans.xml-->
+<!-- https://docs.jboss.org/weld/reference/latest/en-US/html_single/#_explicit_bean_archive-->
+<beans></beans>

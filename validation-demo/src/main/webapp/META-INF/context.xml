@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Context crossContext="true">
+<!--    在Tomcat使用Weld-->
+<!--    查看Weld文档中Application servers and environments supported by Weld 一节-->
+    <Resource name="BeanManager"
+              auth="Container"
+              type="jakarta.enterprise.inject.spi.BeanManager"
+              factory="org.jboss.weld.resources.ManagerObjectFactory" />
+</Context>
