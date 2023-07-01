@@ -4,6 +4,7 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.mvc.Controller;
 import jakarta.mvc.Models;
+import jakarta.mvc.MvcContext;
 import jakarta.mvc.View;
 import jakarta.mvc.binding.BindingResult;
 import jakarta.mvc.binding.MvcBinding;
@@ -16,6 +17,9 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriBuilder;
+import java.net.URI;
+import java.util.Map;
 import net.bytebuddy.implementation.bind.MethodDelegationBinder.BindingResolver;
 
 /**
@@ -35,6 +39,9 @@ public class MvcController {
      */
     @Inject
     private BindingResult bindingResult;
+    
+    @Inject
+    private MvcContext mvcContext;
 
     @GET
     @Path("helloMvc/{path}")
@@ -60,5 +67,15 @@ public class MvcController {
     @View("csrf.jsp")
     public void csrf() {
         models.put("message", "csrf");
+    }
+    
+    @GET
+    @Path("buildUrl")
+    public Response buildUrl() {
+        Map<String, Object> map = Map.of("path", "buildUrl");
+        String path = mvcContext.uri("MvcController#helloMvc", map).getPath();
+//        path is /mvc-demo/mvc/test/helloMvc/buildUrl; 由于请求中带有mvc-demo/mvc，所以需要去掉
+        URI uri = UriBuilder.fromPath("../.."+path).buildFromMap(map);
+        return Response.seeOther(uri).build();
     }
 }
