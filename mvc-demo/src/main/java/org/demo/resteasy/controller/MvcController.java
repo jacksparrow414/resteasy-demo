@@ -20,7 +20,6 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
 import java.net.URI;
 import java.util.Map;
-import net.bytebuddy.implementation.bind.MethodDelegationBinder.BindingResolver;
 
 /**
  * @author jacksparrow414
