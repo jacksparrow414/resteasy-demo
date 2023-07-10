@@ -29,7 +29,7 @@
 <div>
     <form action="${pageContext.request.contextPath}/mvc/test/csrf" method="post">
 <%--       https://jakarta.ee/specifications/mvc/2.1/jakarta-mvc-spec-2.1.html#mvc_context --%>
-        <input type="hidden" name="${mvc.csrf.name}" value="${mvc.csrf.token}"/>
+<%--        <input type="hidden" name="${mvc.csrf.name}" value="${mvc.csrf.token}"/>--%>
         <input type="submit" value="测试csrf"/>
     </form>
 </div>

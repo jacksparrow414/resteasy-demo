@@ -10,10 +10,9 @@ import org.junit.jupiter.api.Test;
 
 /**
  * @author jacksparrow414
- * @date 2023/7/8
+ * @date 2023/7/10
  */
 public class StreamControllerTest {
-    
     
     @SneakyThrows
     @Test
@@ -23,13 +22,10 @@ public class StreamControllerTest {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
         connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-//        DataOutputStream out = new DataOutputStream(connection.getOutputStream());
-//        out.writeBytes(getEncodedArgs(propsIn));
-//        out.flush();
-//        out.close();
         InputStream in = connection.getInputStream();
         ObjectInputStream result = new ObjectInputStream(in);
         propsRet = (Properties) result.readObject();
         System.out.println(propsRet);
     }
+    
 }
