@@ -28,6 +28,18 @@ public class StreamController {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(output);
             objectOutputStream.writeObject(props);
         };
+        
+        // 当返回的是PrintWriter时，可以这样，要设置内容编码
+        //StreamingOutput streamingOutput = output -> {
+        //    PrintWriter writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(output, StandardCharsets.UTF_8)));
+       //     writer.wtrite("<h1>test</h1>")
+       // };
+
+        // 传统Servlet做法，同样要设置内容编码
+        //response.setContentType("text/plain; charset=UTF-8")
+        //PrintWriter writer = response.getWriter();
+
+        
         return Response.ok().entity(streamingOutput).build();
     }
 }
