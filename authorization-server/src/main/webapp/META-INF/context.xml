@@ -2,7 +2,9 @@
 <!-- https://tomcat.apache.org/tomcat-9.0-doc/config/context.html#Introduction -->
 <!-- The Context element represents a web application, which is run within a particular virtual host -->
 
-<!-- 每个context.xml代表一个独立的应用, 并且Tomcat文档也建议不要再server.xml中声明Context -->
+<!-- 每个context.xml代表一个独立的应用, 并且Tomcat文档也建议不要在server.xml中声明Context -->
+<!-- It is NOT recommended to place <Context> elements directly in the server.xml file. --> 
+<!-- This is because it makes modifying the Context configuration more invasive since the main conf/server.xml file cannot be reloaded without restarting Tomcat -->
 <!-- https://tomcat.apache.org/tomcat-9.0-doc/config/context.html#Defining_a_context -->
 <!-- In an individual file at /META-INF/context.xml inside the application files -->
 
