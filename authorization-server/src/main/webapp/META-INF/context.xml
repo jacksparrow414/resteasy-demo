@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!-- https://tomcat.apache.org/tomcat-9.0-doc/config/context.html#Introduction -->
+<!-- The Context element represents a web application, which is run within a particular virtual host -->
+
+<!-- 每个context.xml代表一个独立的应用, 并且Tomcat文档也建议不要再server.xml中声明Context -->
+<!-- https://tomcat.apache.org/tomcat-9.0-doc/config/context.html#Defining_a_context -->
+<!-- In an individual file at /META-INF/context.xml inside the application files -->
+
 <Context crossContext="true">
-<!--    <ResourceLink global="jdbc/myLocalJPADB"-->
-<!--                  name="jdbc/myLocalJPADB"-->
-<!--                  auth="Container"-->
-<!--                  type="javax.sql.DataSource"/>-->
+      
 <!--    在Tomcat使用Weld-->
 <!--    https://balusc.omnifaces.org/2013/10/how-to-install-cdi-in-tomcat.html-->
 <!--    https://docs.jboss.org/weld/reference/latest-3.1/en-US/html_single/#_tomcat-->
@@ -19,16 +23,31 @@
               factory="org.jboss.weld.resources.ManagerObjectFactory" />
 
 <!--    不需要修改Tomcat server.xml-->
+<!-- https://tomcat.apache.org/tomcat-9.0-doc/config/context.html#Resource_Definitions -->
+<!-- This is equivalent to the inclusion of the following element in the web application deployment descriptor (/WEB-INF/web.xml): <resource-ref> -->
+<!-- 在context.xml中定义resource和在web.xml中使用resource-ref标签一样-->
     <Resource name="jdbc/myLocalJPADB"
               auth="Container"
+        <!-- 使用Tomcat自己的连接池而不是DBCP -->
+        <!-- https://tomcat.apache.org/tomcat-9.0-doc/jdbc-pool.html#JNDI_Factory_and_Type -->
+              factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
               type="javax.sql.DataSource"
               driverClassName="org.h2.Driver"
               url="jdbc:h2:mem:db1;DB_CLOSE_DELAY=-1"
               username="sa"
               password=""
-
+        <!-- 下列参数对应Tomcat自己的连接池而不是DBCP -->
               maxActive="100"
               maxIdle="20"
               minIdle="5"
               maxWait="10000"/>
+
+<!-- https://tomcat.apache.org/tomcat-9.0-doc/config/context.html#Resource_Links -->
+<!-- This element is used to create a link to a global JNDI resource -->
+<!-- 它是Link global resource的, global resource是定义在conf/server.xml中的, 所以对于单个应用,只需要使用上面的Resource标签就能满足 -->
+<!--    <ResourceLink global="jdbc/myLocalJPADB"-->
+<!--                  name="jdbc/myLocalJPADB"-->
+<!--                  auth="Container"-->
+<!--                  type="javax.sql.DataSource"/>-->
+        
 </Context>
