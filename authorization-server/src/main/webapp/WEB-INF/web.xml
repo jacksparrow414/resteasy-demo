@@ -5,6 +5,10 @@
                       https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
          version="6.0">
 <!--在src/main/webapp/META-INF/context.xml 配置了，这里似乎不再需要-->
+<!-- https://tomcat.apache.org/tomcat-9.0-doc/config/context.html#Resource_Definitions -->
+<!-- This is equivalent to the inclusion of the following element in the web application deployment descriptor (/WEB-INF/web.xml): <resource-ref> -->
+<!-- 在context.xml中定义resource和在web.xml中使用resource-ref标签一样-->
+         
 <!--    <resource-ref>-->
 <!--        <description>DBConnection</description>-->
 <!--        <res-ref-name>jdbc/myLocalJPADB</res-ref-name>-->
