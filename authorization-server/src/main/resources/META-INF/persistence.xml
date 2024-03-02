@@ -4,12 +4,15 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
                                  http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+  <!-- https://jakarta.ee/specifications/persistence/3.1/jakarta-persistence-spec-3.1#persistence-xml-file -->
+  <!-- Java SE 环境下 transaction-type 默认是RESOURCE_LOCAL
     <persistence-unit name="restEasy" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <non-jta-data-source>java:comp/env/jdbc/myLocalJPADB</non-jta-data-source>
         <!--放代表数据库表的实体-->
         <class>com.demo.resteasy.model.Client</class>
         <class>com.demo.resteasy.model.User</class>
+        <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
         <properties>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
