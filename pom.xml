@@ -7,14 +7,6 @@
     <groupId>org.demo</groupId>
     <artifactId>resteasy</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <modules>
-        <module>authorization-server</module>
-        <module>authorization-common</module>
-        <module>resource-server</module>
-        <module>thirdparty-server</module>
-        <module>validation-demo</module>
-        <module>mvc-demo</module>
-    </modules>
     <packaging>pom</packaging>
 
     <name>resteasy Maven Webapp</name>
@@ -22,6 +14,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.parameters>true</maven.compiler.parameters>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
         <resteasy.version>6.2.2.Final</resteasy.version>
         <lombok.version>1.18.22</lombok.version>
         <hibernate.validator.version>8.0.0.Final</hibernate.validator.version>
@@ -255,6 +249,35 @@
 
 
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>oauth2-demo</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>authorization-common</module>
+                <module>authorization-server</module>
+                <module>resource-server</module>
+                <module>thirdparty-server</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>validation-demo</id>
+            <modules>
+                <module>validation-demo</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>mvc-demo</id>
+            <modules>
+                <module>mvc-demo</module>
+            </modules>
+        </profile>
+    </profiles>
 
     <build>
         <finalName>resteasy</finalName>
