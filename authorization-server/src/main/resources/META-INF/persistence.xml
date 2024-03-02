@@ -18,14 +18,14 @@
             <property name="hibernate.format_sql" value="true"/>
             <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
             <!--JPA原生方式-->
-<!--            <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>-->
-<!--            <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:db1;DB_CLOSE_DELAY=-1"/>-->
-<!--            <property name="javax.persistence.jdbc.user" value="sa"/>-->
-<!--            <property name="javax.persistence.jdbc.password" value=""/>-->
-            <property name="javax.persistence.schema-generation.database.action" value="create"/>
-            <property name="javax.persistence.schema-generation.create-source" value="script"/>
-            <property name="javax.persistence.schema-generation.create-script-source" value="META-INF/sql/create.sql" />
-            <property name="javax.persistence.sql-load-script-source" value="META-INF/sql/data.sql" />
+            <property name="jakarta.persistence.jdbc.driver" value="org.h2.Driver"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:h2:mem:db1;DB_CLOSE_DELAY=-1"/>
+            <property name="jakarta.persistence.jdbc.user" value="sa"/>
+            <property name="jakarta.persistence.jdbc.password" value=""/>
+            <property name="jakarta.persistence.schema-generation.database.action" value="create"/>
+            <property name="jakarta.persistence.schema-generation.create-source" value="script"/>
+            <property name="jakarta.persistence.schema-generation.create-script-source" value="META-INF/sql/create.sql" />
+            <property name="jakarta.persistence.sql-load-script-source" value="META-INF/sql/data.sql" />
         </properties>
     </persistence-unit>
 </persistence>
