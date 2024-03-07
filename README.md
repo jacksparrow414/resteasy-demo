@@ -13,7 +13,7 @@
 [参考实现的文章](https://www.baeldung.com/java-ee-oauth2-implementation)
 
 ## 实现
-完全使用JavaEE标准及其实现
+完全使用JakartaEE标准及其实现
 
 ## 使用框架
 - [RestEasy](https://resteasy.dev/)
