@@ -1,0 +1,23 @@
+{
+  "resourcePackages":[
+    "com.demo.resteasy.endpoints",
+    "com.demo.resteasy.model"
+  ],
+  "prettyPrint": true,
+  "cacheTTL": 0,
+  "openAPI": {
+    "info": {
+      "title": "authorization server",
+      "description": "authorization server rest api endpoints",
+      "version": "1.0",
+      "contact": {
+        "email": "jacksparrow414@163.com"
+      }
+    },
+    "servers": [
+      {
+        "url": "https://localhost:8080/authorization-server"
+      }
+    ]
+  }
+}

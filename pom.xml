@@ -16,15 +16,16 @@
         <maven.compiler.parameters>true</maven.compiler.parameters>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <resteasy.version>6.2.2.Final</resteasy.version>
+        <resteasy.version>6.2.12.Final</resteasy.version>
         <lombok.version>1.18.22</lombok.version>
         <hibernate.validator.version>8.0.0.Final</hibernate.validator.version>
         <hibernate.orm.version>6.1.6.Final</hibernate.orm.version>
         <h2.databse.version>1.4.200</h2.databse.version>
         <nimbus-jose-jwt.version>9.15.2</nimbus-jose-jwt.version>
-        <jackson.version>2.14.1</jackson.version>
-        <weld.version>5.1.0.Final</weld.version>
+        <jackson.version>2.19.2</jackson.version>
+        <weld.version>5.1.6.Final</weld.version>
         <bouncycastle.version>1.69</bouncycastle.version>
+        <swagger.version>2.2.35</swagger.version>
     </properties>
 
     <dependencies>
@@ -47,6 +48,12 @@
             <groupId>jakarta.servlet.jsp.jstl</groupId>
             <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
             <version>3.0.0</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jakarta.el-api</artifactId>
+                    <groupId>jakarta.el</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -60,6 +67,12 @@
             <groupId>org.glassfish.expressly</groupId>
             <artifactId>expressly</artifactId>
             <version>5.0.0</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jakarta.el-api</artifactId>
+                    <groupId>jakarta.el</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -182,6 +195,16 @@
             <groupId>org.jboss.weld.servlet</groupId>
             <artifactId>weld-servlet-core</artifactId>
             <version>${weld.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jakarta.annotation-api</artifactId>
+                    <groupId>jakarta.annotation</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>jboss-logging</artifactId>
+                    <groupId>org.jboss.logging</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 <!--resteasy-->
 
@@ -219,6 +242,26 @@
                     <artifactId>jackson-databind</artifactId>
                     <groupId>com.fasterxml.jackson.core</groupId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>jackson-datatype-jsr310</artifactId>
+                    <groupId>com.fasterxml.jackson.datatype</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>jackson-jakarta-rs-json-provider</artifactId>
+                    <groupId>com.fasterxml.jackson.jakarta.rs</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>jackson-jakarta-rs-base</artifactId>
+                    <groupId>com.fasterxml.jackson.jakarta.rs</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>jackson-module-jakarta-xmlbind-annotations</artifactId>
+                    <groupId>com.fasterxml.jackson.module</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>jakarta.activation-api</artifactId>
+                    <groupId>jakarta.activation</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
@@ -245,6 +288,19 @@
             <artifactId>junit-jupiter</artifactId>
             <version>5.9.1</version>
             <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-jaxrs2-jakarta -->
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-jaxrs2-jakarta</artifactId>
+            <version>${swagger.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>snakeyaml</artifactId>
+                    <groupId>org.yaml</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
 
@@ -320,6 +376,11 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>3.2.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>com.googlecode.maven-download-plugin</groupId>
+                    <artifactId>download-maven-plugin</artifactId>
+                    <version>1.13.0</version>
                 </plugin>
             </plugins>
         </pluginManagement>

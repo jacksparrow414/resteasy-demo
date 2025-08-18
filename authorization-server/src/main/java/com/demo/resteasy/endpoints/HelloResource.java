@@ -2,6 +2,12 @@ package com.demo.resteasy.endpoints;
 
 import com.demo.resteasy.vo.UserVO;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -30,6 +36,7 @@ import jakarta.ws.rs.core.Response.Status;
 import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpStatus;
 import org.jboss.resteasy.annotations.Form;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
@@ -48,6 +55,30 @@ public class HelloResource {
     /**
      * curl http:localhost:8080/auth/hello/jack
      */
+    @Operation(
+            summary = "hello",
+            description = "just hello",
+            parameters = {
+                    @Parameter(
+                            description = "name",
+                            schema = @Schema(
+                                    type = "string",
+                                    description = "this is input name"
+                            ),
+                            required = true
+                    )
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "success"
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "server error"
+                    )
+            }
+    )
     @GET
     @Path("{name}")
     @Produces(MediaType.TEXT_PLAIN)
